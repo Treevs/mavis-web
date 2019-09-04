@@ -3,11 +3,23 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var mongoose = require("mongoose");
+mongoose.Promise = global.Promise;
+mongoose.connect("mongodb://localhost:27017/mavis", { useNewUrlParser: true });
+mongoose.promise = global.Promise;
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+
 
 var app = express();
+
+var MLBPlayer = require(__dirname+'/models/MLBPlayer');
+var User = require(__dirname+'/models/User');
+
+require(__dirname+'/config/passport')
+var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/users');
+app.use(require('./routes'));
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -19,8 +31,31 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+let allowCrossDomain = function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', "*");
+  res.header('Access-Control-Allow-Headers', "*");
+  next();
+}
+app.use(allowCrossDomain);
+
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+app.get('/players', function(req, res) {
+  // var query = MLBPlayer.findOne({'name': "Mike Trout"}).exec({
+
+  // });
+  MLBPlayer.find({}).lean().exec(function (err, docs) {
+    // docs are plain javascript objects instead of model instances
+    res.send(docs);
+  });
+  // console.log(query);
+  // res.send("query");
+  
+});
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

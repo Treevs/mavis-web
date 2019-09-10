@@ -80,12 +80,17 @@ export class Navbar extends React.Component {
         </div>
         <div className="right">
           <button className="nav-button" onClick={this.toggleLoginForm}>Login</button>
-          <button className="nav-button">Sign Up</button>
+          <button className="nav-button" onClick={this.toggleRegisterForm}>Sign Up</button>
         </div>
         <div className={this.state.showLoginForm ? '' : 'hidden'}>
           Email: <input type="email" value={this.state.email} onChange={this.handleEmailChange}/>
           Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/>
           <button onClick={this.login}>Log In</button>
+        </div>
+        <div className={this.state.showRegisterForm ? '' : 'hidden'}>
+          Email: <input type="email" value={this.state.email} onChange={this.handleEmailChange}/>
+          Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/>
+          <button onClick={this.register}>Sign Up</button>
         </div>
       </div>
     );

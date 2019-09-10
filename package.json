@@ -1,0 +1,21 @@
+{
+  "name": "mavis-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "frontend": "cd mavis-frontend && npm start",
+    "backend": "cd mavis-backend && npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Treevs/mavis-web.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Treevs/mavis-web/issues"
+  },
+  "homepage": "https://github.com/Treevs/mavis-web#readme"
+}

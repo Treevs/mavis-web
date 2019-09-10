@@ -56,12 +56,14 @@ export class Navbar extends React.Component {
   }
   toggleLoginForm() {
     this.setState(state => ({
-      showLoginForm: !state.showLoginForm
+      showLoginForm: !state.showLoginForm,
+      showRegisterForm: false
     }));
   }
   toggleRegisterForm() {
     this.setState(state => ({
-      showRegisterForm: !state.showRegisterForm
+      showRegisterForm: !state.showRegisterForm,
+      showLoginForm: false
     }));
   }
   handleEmailChange(event) {

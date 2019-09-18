@@ -19,6 +19,7 @@ export class Navbar extends React.Component {
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.login = this.login.bind(this);
+    this.register = this.register.bind(this);
   }
 
   componentDidMount() {
@@ -44,11 +45,16 @@ export class Navbar extends React.Component {
   }
   register() {
     //Post register route
+    var email = this.state.email;
+    var password = this.state.password;
     var register = axios.post('api/users/register', { 
-      
+      user: {
+        email: email,
+        password: password,
+      }
     })
     .then((response) => {
-
+      console.log(response.data)
     })
     .catch(function (error) {
       // handle error

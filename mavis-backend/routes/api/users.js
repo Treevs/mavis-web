@@ -24,12 +24,26 @@ router.post('/register', auth.optional, (req, res, next) => {
         });
     }
 
-    const finalUser = new User(user);
+    var userQuery = User.findOne({'email': user.email}, function(err, data) {
 
-    finalUser.setPassword(user.password);
-
-    return finalUser.save()
-        .then(() => res.json({ user: finalUser.toAuthJSON() }));
+        if(err) {
+            //handle error
+        } if(data != null) {
+            return res.status(422).json({
+                errors: {
+                    email: 'already exists',
+                },
+            });
+        } else {        
+            // console.log(data)
+            const finalUser = new User(user);
+            
+            finalUser.setPassword(user.password);
+            
+            return finalUser.save()
+            .then(() => res.json({ user: finalUser.toAuthJSON() }));
+        }
+    })
 });
 
 //POST login route (optional, everyone has access)

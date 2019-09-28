@@ -1,18 +1,31 @@
 import React from 'react';
 const axios = require('axios');
+const store = require('store');
 
 
 export class Navbar extends React.Component {
   constructor(props){
     super(props)
+    
+    //Check to see if logged in
+    var user = store.get('user');
+    if(user) {
+      console.log(user);
+      var loggedIn = true;
+    } else {
+      var loggedIn = false;
+    }
+
     this.state = {
-      loggedIn: false,
-      token: "",
+      loggedIn: loggedIn,
+      user: "",
       showLoginForm: false,
       showRegisterForm: false,
       email: "",
       password: ""
     }
+
+
 
     this.toggleLoginForm = this.toggleLoginForm.bind(this);
     this.toggleRegisterForm = this.toggleRegisterForm.bind(this);
@@ -20,6 +33,7 @@ export class Navbar extends React.Component {
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.login = this.login.bind(this);
     this.register = this.register.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
   componentDidMount() {
@@ -38,9 +52,19 @@ export class Navbar extends React.Component {
     })
     .then((response) => {
       console.log(response.data)
+      // alert(response.data.user.email)
+      store.set('user', response.data.user)
+      this.setState({
+        user: response.data.user,
+        token: response.data.user.token,
+        loggedIn: true,
+        showLoginForm: false
+      })
     })
     .catch(function (error) {
       // handle error
+      console.log("error")
+      console.log(error)
     });
   }
   register() {
@@ -54,10 +78,20 @@ export class Navbar extends React.Component {
       }
     })
     .then((response) => {
-      console.log(response.data)
+      console.log(response.data);
+      this.setState(state => ({
+        showRegisterForm: false
+      }));
     })
     .catch(function (error) {
       // handle error
+    });
+  }
+
+  logout() {
+    store.remove('user');
+    this.setState({
+      loggedIn: false
     });
   }
   toggleLoginForm() {
@@ -87,8 +121,13 @@ export class Navbar extends React.Component {
           MAVIS
         </div>
         <div className="right">
-          <button className="nav-button" onClick={this.toggleLoginForm}>Login</button>
-          <button className="nav-button" onClick={this.toggleRegisterForm}>Sign Up</button>
+          <div className={this.state.loggedIn ? 'hidden' : ''}>
+            <button className="nav-button" onClick={this.toggleLoginForm}>Login</button>
+            <button className="nav-button" onClick={this.toggleRegisterForm}>Sign Up</button>
+          </div>
+          <div className={this.state.loggedIn ? '' : 'hidden'}>
+            <button className="nav-button" onClick={this.logout}>Logout</button>
+          </div>
         </div>
         <div className={this.state.showLoginForm ? '' : 'hidden'}>
           Email: <input type="email" value={this.state.email} onChange={this.handleEmailChange}/>

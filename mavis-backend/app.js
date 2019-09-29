@@ -14,7 +14,8 @@ var app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-var MLBPlayer = require(__dirname+'/models/MLBPlayer');
+// var MLBPlayer = require(__dirname+'/models/MLBPlayer');
+var Player = require(__dirname+'/models/Player');
 var User = require(__dirname+'/models/User');
 
 require(__dirname+'/config/passport')
@@ -46,7 +47,7 @@ app.get('/players', function(req, res) {
   // var query = MLBPlayer.findOne({'name': "Mike Trout"}).exec({
 
   // });
-  MLBPlayer.find({}).lean().exec(function (err, docs) {
+  Player.find({}).lean().exec(function (err, docs) {
     // docs are plain javascript objects instead of model instances
     res.send(docs);
   });

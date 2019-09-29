@@ -8,9 +8,11 @@ export class Navbar extends React.Component {
     super(props)
     
     //Check to see if logged in
-    var user = store.get('user');
-    if(user) {
-      console.log(user);
+    // var user = store.get('user');
+    var token = "Token " + store.get('token');
+    if(token) {
+      console.log(token);
+      var currentUser = this.current(token);
       var loggedIn = true;
     } else {
       var loggedIn = false;
@@ -22,7 +24,8 @@ export class Navbar extends React.Component {
       showLoginForm: false,
       showRegisterForm: false,
       email: "",
-      password: ""
+      password: "",
+      buyingPower: 0
     }
 
 
@@ -33,6 +36,7 @@ export class Navbar extends React.Component {
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.login = this.login.bind(this);
     this.register = this.register.bind(this);
+    this.current = this.current.bind(this);
     this.logout = this.logout.bind(this);
   }
 
@@ -53,10 +57,12 @@ export class Navbar extends React.Component {
     .then((response) => {
       console.log(response.data)
       // alert(response.data.user.email)
-      store.set('user', response.data.user)
+      store.set('token', response.data.user.token)
+      console.log(response.data)
       this.setState({
         user: response.data.user,
         token: response.data.user.token,
+        buyingPower: response.data.buyingPower,
         loggedIn: true,
         showLoginForm: false
       })
@@ -88,8 +94,33 @@ export class Navbar extends React.Component {
     });
   }
 
+  current(token) {
+    console.log(token)
+    var login = axios.get('api/users/current', {
+      headers: {Authorization: token}
+    })
+    .then((response) => {
+      console.log(response.data)
+      // alert(response.data.user.email)
+      store.set('user', response.data.user)
+      console.log(response.data)
+      this.setState({
+        user: response.data.user,
+        // token: response.data.user.token,
+        buyingPower: response.data.buyingPower,
+        loggedIn: true,
+        showLoginForm: false
+      })
+    })
+    .catch(function (error) {
+      // handle error
+      console.log("error")
+      console.log(error)
+    });
+  }
+
   logout() {
-    store.remove('user');
+    store.remove('token');
     this.setState({
       loggedIn: false
     });
@@ -126,6 +157,7 @@ export class Navbar extends React.Component {
             <button className="nav-button" onClick={this.toggleRegisterForm}>Sign Up</button>
           </div>
           <div className={this.state.loggedIn ? '' : 'hidden'}>
+            ${this.state.buyingPower}
             <button className="nav-button" onClick={this.logout}>Logout</button>
           </div>
         </div>

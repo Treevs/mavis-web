@@ -75,7 +75,7 @@ router.post('/login', auth.optional, (req, res, next) => {
             const user = passportUser;
             user.token = passportUser.generateJWT();
 
-            return res.json({ user: user.toAuthJSON() });
+            return res.json({ user: user.toAuthJSON(), buyingPower: user.getBuyingPowerString() });
         }
 
         return status(400).info;
@@ -92,7 +92,7 @@ router.get('/current', auth.required, (req, res, next) => {
                 return res.sendStatus(400);
             }
             
-            return res.json({ user: user.toAuthJSON() });
+            return res.json({ user: user.toAuthJSON(), buyingPower: user.getBuyingPowerString()});
         })
 })
 

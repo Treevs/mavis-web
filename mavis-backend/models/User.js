@@ -5,9 +5,11 @@ const jwt = require('jsonwebtoken');
 const { Schema } = mongoose;
 
 const UserSchema = new Schema({
-    email: String,
-    hash: String,
-    salt: String,
+    email: {type: String},
+    hash: {type: String},
+    salt: {type: String},
+    buyingPower: {type: Number, default: 100000000},
+    portfolio: {type: Schema.Types.Mixed}
 });
 
 UserSchema.methods.setPassword = function(password) {
@@ -40,5 +42,15 @@ UserSchema.methods.toAuthJSON = function() {
         token: this.generateJWT(),
     };
 };
+
+UserSchema.methods.getBuyingPower = function() {
+    return {
+        buyingPower: this.buyingPower
+    }
+}
+UserSchema.methods.getBuyingPowerString = function() {
+    var buyingPowerString = (this.buyingPower/10000).toFixed(2);
+    return buyingPowerString;
+}
 
 module.exports = mongoose.model('User', UserSchema); //Tutorial didn't have "module.exports = "

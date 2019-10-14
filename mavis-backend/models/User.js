@@ -1,15 +1,18 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+const Player = mongoose.model('Player');
+
 
 const { Schema } = mongoose;
 
+const PortfolioSchema = new Schema({ticker: String, purchasePrice: Number, numberOfShares: Number})
 const UserSchema = new Schema({
     email: {type: String},
     hash: {type: String},
     salt: {type: String},
     buyingPower: {type: Number, default: 100000000},
-    portfolio: {type: Schema.Types.Mixed}
+    portfolio: [PortfolioSchema]
 });
 
 UserSchema.methods.setPassword = function(password) {
@@ -51,6 +54,35 @@ UserSchema.methods.getBuyingPower = function() {
 UserSchema.methods.getBuyingPowerString = function() {
     var buyingPowerString = (this.buyingPower/10000).toFixed(2);
     return buyingPowerString;
+}
+
+UserSchema.methods.buyShares = function(ticker, numberOfShares) {
+    var portfolio = this.portfolio;
+    //Get purchase price
+    Player.findOne({ticker: ticker})
+        .then((player) => {
+            var totalCost = player.price*numberOfShares;
+            if (totalCost>this.buyingPower) {
+                //Throw error
+            } else {
+
+                portfolio.push({
+                    ticker: ticker,
+                    numberOfShares: numberOfShares,
+                    purchasePrice: player.price
+                });
+                this.portfolio = portfolio;
+                this.buyingPower -= totalCost;
+                console.log(this.portfolio);
+                this.save()
+            }
+            
+        }).catch(function (error) {
+            // handle error
+            console.log("error")
+            console.log(error)
+          });
+    
 }
 
 module.exports = mongoose.model('User', UserSchema); //Tutorial didn't have "module.exports = "

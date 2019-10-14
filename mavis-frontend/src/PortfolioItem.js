@@ -20,9 +20,16 @@ export class PortfolioItem extends React.Component {
   render() {
     return (
       <div>
-        {this.props.ticker} 
-        -
-        ${this.state.formattedPrice}
+        <div>
+          {this.props.ticker} 
+          -
+          ${this.state.formattedPrice}
+        </div>
+        <div>
+          <button>Buy</button>
+          <button>Sell</button>
+          <input type="text"/> shares
+        </div>
       </div>
     );
   }

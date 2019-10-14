@@ -26,17 +26,15 @@ router.post('/buy', auth.required, (req, res, next) => {
     }
 
     //TODO: Get player info (mostly price)
-    var playerQuery = User.findOne({'email': user.email}, function(err, data) {
+    User.findOne({'email': user.email})
+        .then((user) => {
+            if(!user) {
+                return res.sendStatus(400);
+            }
 
-        if(err) {
-            //handle error
-        } else {
-            //TOOD: Execute a buy
-            var buyQuery = User.findOne({'email': user.email}, function(err, data) {
-
-            })
-        }
-    })
+            user.buyShares(ticker, shares);
+            return res.json({})
+        })
     
 });
 

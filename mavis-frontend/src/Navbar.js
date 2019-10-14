@@ -11,7 +11,6 @@ export class Navbar extends React.Component {
     // var user = store.get('user');
     var token = "Token " + store.get('token');
     if(token) {
-      console.log(token);
       var currentUser = this.current(token);
       var loggedIn = true;
     } else {
@@ -95,15 +94,12 @@ export class Navbar extends React.Component {
   }
 
   current(token) {
-    console.log(token)
     var login = axios.get('api/users/current', {
       headers: {Authorization: token}
     })
     .then((response) => {
-      console.log(response.data)
       // alert(response.data.user.email)
       store.set('user', response.data.user)
-      console.log(response.data)
       this.setState({
         user: response.data.user,
         // token: response.data.user.token,

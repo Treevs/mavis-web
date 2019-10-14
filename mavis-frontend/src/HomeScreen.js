@@ -1,5 +1,5 @@
 import React from 'react';
-import { PortfolioItem } from './PortfolioItem';
+import { Player } from './Player';
 
 class HomeScreen extends React.Component {
   constructor(props){
@@ -15,7 +15,7 @@ class HomeScreen extends React.Component {
         <div>
           {this.state.objs && 
           this.state.objs.map(function(item) {
-            return <PortfolioItem key={item._id} ticker={item.ticker} price={item.price}>{item.ticker}</PortfolioItem>
+            return <Player key={item._id} ticker={item.ticker} price={item.price}>{item.ticker}</Player>
           })}
         </div>
     )

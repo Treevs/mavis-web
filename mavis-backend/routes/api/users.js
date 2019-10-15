@@ -96,4 +96,17 @@ router.get('/current', auth.required, (req, res, next) => {
         })
 })
 
+//GET portfolio object
+router.get('/portfolio', auth.required, (req, res, next) => {
+    const{ body: {user}, payload: { id} } = req;
+    return User.findById(id)
+        .then((user) =>{
+            if(!user) {
+                return res.sendStatus(400);
+            }
+
+            return res.json({portfolio: user.getPrettyPortfolio()});
+        })
+})
+
 module.exports = router;

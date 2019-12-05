@@ -61,7 +61,7 @@ export class Player extends React.Component {
         <div>
           <button onClick={this.buy}>Buy</button>
           <button>Sell</button>
-          <input type="text" onChange={this.handleChange} /> shares
+          <input type="text" onChange={this.handleChange} /> {this.props.numberOfShares} shares
         </div>
       </div>
     );

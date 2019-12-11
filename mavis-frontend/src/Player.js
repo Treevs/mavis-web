@@ -15,12 +15,24 @@ export class Player extends React.Component {
   }
 
   componentDidMount() {
-    this.formatPrice();
+    this.getCurrentPrice();
   }
 
-  formatPrice() {
-    var formattedPrice = (this.props.price/10000).toFixed(2)
-    this.setState({formattedPrice: formattedPrice})
+
+  getCurrentPrice() {
+    fetch('http://127.0.0.1:5000/players/'+this.props.ticker)
+            .then((response) => response.json())
+            .then((responseJson) => {
+              var formattedPrice = (responseJson.price/10000).toFixed(2)
+              this.setState({
+                formattedPrice: formattedPrice
+              })
+              console.log(responseJson);
+              
+            })
+            .catch((error) => {
+              console.error(error);
+            });
   }
 
   buy() {

@@ -43,18 +43,24 @@ app.use(allowCrossDomain);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-app.get('/players', function(req, res) {
-  // var query = MLBPlayer.findOne({'name': "Mike Trout"}).exec({
+app.get('/players/:ticker', function(req, res) {
 
-  // });
+  Player.findOne({'ticker': req.params.ticker}).lean().exec(function (err, docs) {
+    // docs are plain javascript objects instead of model instances
+    res.send(docs);
+  });
+  
+});
+app.get('/players', function(req, res) {
+
   Player.find({}).lean().exec(function (err, docs) {
     // docs are plain javascript objects instead of model instances
     res.send(docs);
   });
-  // console.log(query);
-  // res.send("query");
-  
+
 });
+
+
 
 
 

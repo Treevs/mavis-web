@@ -87,21 +87,8 @@ UserSchema.methods.buyShares = function(ticker, numberOfShares) {
 
 UserSchema.methods.getPrettyPortfolio = function() {
     var prettyPortfolio = this.portfolio;
-    //Group based on same stock
-    
-    //Get current price
-    // prettyPortfolio.forEach(function(element, index) {
-    //     Player.findOne({ticker: prettyPortfolio[index].ticker})
-    //         .then((player) => {
-    //             prettyPortfolio[index].prettyPrice = player.price;
-    //             console.log(prettyPortfolio)
-    //             return prettyPortfolio;
-    //         }).catch(function (error) {
-    //             // handle error
-    //             console.log("error")
-    //             console.log(error)
-    //           });
-    // })
+
+    //TODO verify if this is needed
     return prettyPortfolio;
 }
 module.exports = mongoose.model('User', UserSchema); //Tutorial didn't have "module.exports = "

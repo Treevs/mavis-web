@@ -21,7 +21,7 @@ class HomeScreen extends React.Component {
           <h2>Portfolio</h2>
           {this.state.portfolio && 
           this.state.portfolio.map(function(item) {
-            return <Player key={item._id} ticker={item.ticker} numberOfShares={item.numberOfShares} price={/*item.prettyPrice*/ item.purchasePrice}>{item.ticker}</Player>
+            return <Player key={item._id} ticker={item.ticker} numberOfShares={item.numberOfShares} price={/*item.prettyPrice*/ item.currentPrice}>{item.ticker}</Player>
           })}
 
           <h2>All Players</h2>
@@ -44,6 +44,7 @@ class HomeScreen extends React.Component {
       portfolio.forEach(element => {
         if(!portfolioObj[element.ticker]) {
           portfolioObj[element.ticker] = element;
+          
         }
         portfolioObj[element.ticker].numberOfShares += element.numberOfShares;
 
@@ -78,6 +79,8 @@ class HomeScreen extends React.Component {
         console.error(error);
       });
   }
+
+  
 }
 
 export default HomeScreen;

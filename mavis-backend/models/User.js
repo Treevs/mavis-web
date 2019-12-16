@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const Player = mongoose.model('Player');
 
+const MODIFIER = 100; 
 
 const { Schema } = mongoose;
 
@@ -61,6 +62,8 @@ UserSchema.methods.buyShares = function(ticker, numberOfShares) {
     //Get purchase price
     Player.findOne({ticker: ticker})
         .then((player) => {
+            player.price = player.price + (MODIFIER*numberOfShares);
+            player.save();
             var totalCost = player.price*numberOfShares;
             if (totalCost>this.buyingPower) {
                 //Throw error
@@ -73,6 +76,10 @@ UserSchema.methods.buyShares = function(ticker, numberOfShares) {
                 });
                 this.portfolio = portfolio;
                 this.buyingPower -= totalCost;
+                //Be nice if they went over budget due to price increasing. 
+                if(this.buyingPower < 0) {
+                    this.buyingPower = 0;
+                }
                 console.log(this.portfolio);
                 this.save()
             }

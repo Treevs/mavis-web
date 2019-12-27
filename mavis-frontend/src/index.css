@@ -52,6 +52,7 @@ code {
   top: 0;
   position: fixed;
   box-shadow: 0px -5px 35px #888888;
+  z-index: 99;
 }
 
 .buying-power {
@@ -87,12 +88,20 @@ code {
 }
 
 .stock-body.open {
-  height: 360px;
-
+  height: 300px;
+  visibility: visible;
+  overflow: hidden;
+  
+  -webkit-transition: height .5s; /* Safari prior 6.1 */
+  transition: height .5s;
+  
 }
 .stock-body.closed {
   height: 40px;
-
+  visibility: hidden;
+  
+  -webkit-transition: height .5s; /* Safari prior 6.1 */
+  transition: height .5s;
 }
 
 .stock-controls {

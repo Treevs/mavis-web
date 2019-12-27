@@ -1,4 +1,5 @@
 import React from 'react';
+import { PlayerChart } from './PlayerChart';
 const store = require('store');
 const axios = require('axios');
 
@@ -14,6 +15,7 @@ export class Player extends React.Component {
     this.buy = this.buy.bind(this);
     this.sell = this.sell.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.holdUpThere = this.holdUpThere.bind(this);
     this.toggleExpandedView = this.toggleExpandedView.bind(this);
   }
 
@@ -38,7 +40,12 @@ export class Player extends React.Component {
             });
   }
 
-  buy() {
+  holdUpThere(e) {
+    e.stopPropagation();
+  }
+  buy(e) {
+    e.stopPropagation();
+
     const token = "Token " + store.get('token');
     // const token = store.get('token');
     const user = store.get('user');
@@ -61,7 +68,9 @@ export class Player extends React.Component {
     });
   }
 
-  sell() {
+  sell(e) {
+    e.stopPropagation();
+
     const token = "Token " + store.get('token');
     // const token = store.get('token');
     const user = store.get('user');
@@ -118,8 +127,13 @@ export class Player extends React.Component {
             this.stylePercentChange()
           }
         </div>
-        <div className={"stock-body " + (this.state.expandedView ? 'open' : 'closed')}></div>
-        <div className="stock-controls">
+        <div className={"stock-body " + (this.state.expandedView ? 'open' : 'closed')}>
+          {/* {this.state.expandedView &&  */}
+            <PlayerChart></PlayerChart>
+          {/* } */}
+
+        </div>
+        <div className="stock-controls" onClick={this.holdUpThere}>
           <button onClick={this.buy}>Buy</button>
           <button onClick={this.sell}>Sell</button>
           <input type="text" onChange={this.handleChange} /> {this.props.numberOfShares} shares

@@ -144,28 +144,30 @@ export class Navbar extends React.Component {
   render() {
     return (
       <div className="navbar">
-        <div className="left">
+        <div className="center logo">
           MAVIS
         </div>
-        <div className="right">
-          <div className={this.state.loggedIn ? 'hidden' : ''}>
-            <button className="nav-button" onClick={this.toggleLoginForm}>Login</button>
-            <button className="nav-button" onClick={this.toggleRegisterForm}>Sign Up</button>
+        <div className="buying-power">
+          <div>
+            <div className={this.state.loggedIn ? 'hidden' : ''}>
+              <button className="nav-button" onClick={this.toggleLoginForm}>Login</button>
+              <button className="nav-button" onClick={this.toggleRegisterForm}>Sign Up</button>
+            </div>
+            <div className={this.state.loggedIn ? '' : 'hidden'}>
+              ${this.state.buyingPower}
+              <button className="nav-button" onClick={this.logout}>Logout</button>
+            </div>
           </div>
-          <div className={this.state.loggedIn ? '' : 'hidden'}>
-            ${this.state.buyingPower}
-            <button className="nav-button" onClick={this.logout}>Logout</button>
+          <div className={this.state.showLoginForm ? '' : 'hidden'}>
+            Email: <input type="email" value={this.state.email} onChange={this.handleEmailChange}/>
+            Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/>
+            <button onClick={this.login}>Log In</button>
           </div>
-        </div>
-        <div className={this.state.showLoginForm ? '' : 'hidden'}>
-          Email: <input type="email" value={this.state.email} onChange={this.handleEmailChange}/>
-          Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/>
-          <button onClick={this.login}>Log In</button>
-        </div>
-        <div className={this.state.showRegisterForm ? '' : 'hidden'}>
-          Email: <input type="email" value={this.state.email} onChange={this.handleEmailChange}/>
-          Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/>
-          <button onClick={this.register}>Sign Up</button>
+          <div className={this.state.showRegisterForm ? '' : 'hidden'}>
+            Email: <input type="email" value={this.state.email} onChange={this.handleEmailChange}/>
+            Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/>
+            <button onClick={this.register}>Sign Up</button>
+          </div>
         </div>
       </div>
     );

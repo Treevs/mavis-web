@@ -21,13 +21,13 @@ class HomeScreen extends React.Component {
           <h2>Portfolio</h2>
           {this.state.portfolio && 
           this.state.portfolio.map(function(item) {
-            return <Player key={item._id} ticker={item.ticker} numberOfShares={item.numberOfShares} price={/*item.prettyPrice*/ item.currentPrice}>{item.ticker}</Player>
+            return <Player key={item._id} ticker={item.ticker} numberOfShares={item.numberOfShares} price={/*item.prettyPrice*/ item.currentPrice} percentChange={"+10%"}>{item.ticker}</Player>
           })}
 
           <h2>All Players</h2>
           {this.state.objs && 
           this.state.objs.map(function(item) {
-            return <Player key={item._id} ticker={item.ticker} numberOfShares={item.numberOfShares} price={item.price}>{item.ticker}</Player>
+            return <Player key={item._id} ticker={item.ticker} numberOfShares={item.numberOfShares} price={item.price} percentChange={"-10%"}>{item.ticker}</Player>
           })}
         </div>
     )

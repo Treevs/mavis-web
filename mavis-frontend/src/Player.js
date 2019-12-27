@@ -8,11 +8,13 @@ export class Player extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      formattedPrice: "0"
+      formattedPrice: "0",
+      expandedView: false
     }
     this.buy = this.buy.bind(this);
     this.sell = this.sell.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.toggleExpandedView = this.toggleExpandedView.bind(this);
   }
 
   componentDidMount() {
@@ -86,15 +88,38 @@ export class Player extends React.Component {
     this.setState({value: event.target.value});
   }
 
+  stylePercentChange() {
+    var change = this.props.percentChange
+    var modifier = "";
+    if(change.charAt(0) == "+") {
+      modifier = "positive-change";
+    } else if(change.charAt(0) == "-") {
+      modifier = "negative-change";
+    }
+    return <span className={"percent " + modifier}>({this.props.percentChange})</span>
+  }
+
+  toggleExpandedView() {
+    this.setState(state => ({
+      expandedView: !state.expandedView
+    }));
+  }
+
   render() {
     return (
-      <div>
-        <div>
+      <div className="stock-card" onClick={this.toggleExpandedView}>
+        <div className="stock-header">
           {this.props.ticker} 
           -
           ${this.state.formattedPrice}
+
+          {this.props.percentChange &&
+          
+            this.stylePercentChange()
+          }
         </div>
-        <div>
+        <div className={"stock-body " + (this.state.expandedView ? 'open' : 'closed')}></div>
+        <div className="stock-controls">
           <button onClick={this.buy}>Buy</button>
           <button onClick={this.sell}>Sell</button>
           <input type="text" onChange={this.handleChange} /> {this.props.numberOfShares} shares

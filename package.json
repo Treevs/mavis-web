@@ -17,5 +17,6 @@
   "bugs": {
     "url": "https://github.com/Treevs/mavis-web/issues"
   },
-  "homepage": "https://github.com/Treevs/mavis-web#readme"
+  "homepage": "https://github.com/Treevs/mavis-web#readme",
+  "dependencies": {}
 }

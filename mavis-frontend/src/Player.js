@@ -11,6 +11,7 @@ export class Player extends React.Component {
       formattedPrice: "0"
     }
     this.buy = this.buy.bind(this);
+    this.sell = this.sell.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -58,6 +59,29 @@ export class Player extends React.Component {
     });
   }
 
+  sell() {
+    const token = "Token " + store.get('token');
+    // const token = store.get('token');
+    const user = store.get('user');
+    const headers = {Authorization: token};
+    console.log(this.state.value + " shares of " + this.props.ticker + " @" + this.state.formattedPrice);
+
+    var sell = axios.post('api/players/sell', {
+      user: user,
+      ticker: this.props.ticker,
+      shares: this.state.value
+    }, {headers: headers })
+    .then((response) => {
+      
+    })
+    .catch(function (error) {
+      // handle error
+      console.log("error")
+      console.log(error)
+      console.log(token)
+    });
+  }
+
   handleChange(event) {
     this.setState({value: event.target.value});
   }
@@ -72,7 +96,7 @@ export class Player extends React.Component {
         </div>
         <div>
           <button onClick={this.buy}>Buy</button>
-          <button>Sell</button>
+          <button onClick={this.sell}>Sell</button>
           <input type="text" onChange={this.handleChange} /> {this.props.numberOfShares} shares
         </div>
       </div>

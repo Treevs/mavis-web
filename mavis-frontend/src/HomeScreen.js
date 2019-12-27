@@ -40,23 +40,10 @@ class HomeScreen extends React.Component {
     })
     .then((response) => {
       var portfolio = response.data.portfolio;
-      var portfolioObj = {};
-      portfolio.forEach(element => {
-        if(!portfolioObj[element.ticker]) {
-          portfolioObj[element.ticker] = element;
-          
-        }
-        portfolioObj[element.ticker].numberOfShares += element.numberOfShares;
-
-      });
-      console.log(portfolioObj);
-      console.log(portfolio);
-      var prettyPortfolio = Object.values(portfolioObj)
-
+      
       this.setState({
-        portfolio: prettyPortfolio,
+        portfolio: portfolio,
       });
-      console.log(this.state.portfolio)
     })
     .catch(function (error) {
       // handle error

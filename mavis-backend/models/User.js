@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const Player = mongoose.model('Player');
 
 const MODIFIER = 100; 
+const PRICE_FLOOR = 100000; 
 
 const { Schema } = mongoose;
 
@@ -62,27 +63,93 @@ UserSchema.methods.buyShares = function(ticker, numberOfShares) {
     //Get purchase price
     Player.findOne({ticker: ticker})
         .then((player) => {
+            var intShares = parseInt(numberOfShares)
             player.price = player.price + (MODIFIER*numberOfShares);
             player.save();
             var totalCost = player.price*numberOfShares;
             if (totalCost>this.buyingPower) {
                 //Throw error
+                //TODO: Move this earlier
             } else {
+                var addStockToPortolio = true;
 
-                portfolio.push({
-                    ticker: ticker,
-                    numberOfShares: numberOfShares,
-                    purchasePrice: player.price
+                portfolio.forEach(element => {
+                    if(element.ticker == ticker) {
+                        addStockToPortolio = false;
+                        element.numberOfShares = element.numberOfShares + intShares
+                        this.portfolio = portfolio;
+                        this.buyingPower -= totalCost;
+                        //Be nice if they went over budget due to price increasing. 
+                        if(this.buyingPower < 0) {
+                            this.buyingPower = 0;
+                        }
+                        console.log(this.portfolio);
+                        this.save()
+                        return; 
+                    }
                 });
-                this.portfolio = portfolio;
-                this.buyingPower -= totalCost;
-                //Be nice if they went over budget due to price increasing. 
-                if(this.buyingPower < 0) {
-                    this.buyingPower = 0;
+                if(addStockToPortolio)  {
+                    //No shares of this held
+                    portfolio.push({
+                        ticker: ticker,
+                        numberOfShares: numberOfShares,
+                        purchasePrice: player.price
+                    });
+                    this.portfolio = portfolio;
+                    this.buyingPower -= totalCost;
+                    //Be nice if they went over budget due to price increasing. 
+                    if(this.buyingPower < 0) {
+                        this.buyingPower = 0;
+                    }
+                    console.log(this.portfolio);
+                    this.save()
                 }
-                console.log(this.portfolio);
-                this.save()
             }
+            
+        }).catch(function (error) {
+            // handle error
+            console.log("error")
+            console.log(error)
+          });
+    
+}
+
+UserSchema.methods.sellShares = function(ticker, numberOfShares) {
+    var portfolio = this.portfolio;
+    var totalReturn = 0;
+    //Get purchase price
+    Player.findOne({ticker: ticker})
+        .then((player) => {
+            var intShares = parseInt(numberOfShares)
+            portfolio.forEach((element, index) => {
+                if(element.ticker == ticker) {
+                    if(element.numberOfShares <= intShares) {
+                        //Selling more shares than exist in portfolio
+                        intShares = intShares - element.numberOfShares;
+                        //Modify player price
+                        player.price = Math.max(player.price - (MODIFIER*element.numberOfShares), PRICE_FLOOR);
+                        //Add to total return after modifying the price
+                        totalReturn += player.price*element.numberOfShares;
+                        portfolio.splice(index, 1)
+                        element.numberOfShares = 0;
+                    } else {
+                        //Selling less shares than exist in portfolio
+                        element.numberOfShares = element.numberOfShares - intShares;
+                        //Modify player price
+                        player.price = Math.max(player.price - (MODIFIER*intShares), PRICE_FLOOR);
+                        //Add to total return after modifying the price
+                        totalReturn += player.price*intShares;
+                        intShares = 0;
+                    }
+                }
+                
+            });
+            player.save();
+            this.portfolio = portfolio;
+            this.buyingPower += totalReturn;
+            // console.log(this.portfolio);
+            this.save()
+            return; 
             
         }).catch(function (error) {
             // handle error

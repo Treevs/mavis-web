@@ -17,6 +17,31 @@ code {
     monospace;
 }
 
+/* Button CSS from https://fdossena.com/index.php?p=html5cool/buttons/i.frag */
+button{
+  display:inline-block;
+  padding:0.35em 1.2em;
+  border:0.1em solid #636e72;
+  margin:0 0.3em 0.3em 0;
+  border-radius:0.12em;
+  box-sizing: border-box;
+  text-decoration:none;
+  font-family:'Roboto',sans-serif;
+  font-weight:300;
+  color: #636e72;
+  text-align:center;
+  transition: all 0.2s;
+}
+button:hover{
+  color:#000000;
+  background-color:#FFFFFF;
+}
+
+button.success {
+  color: #00b894;
+  border:0.1em solid #00b894;
+}
+
 .logo {
   font-size: 36px;
 }
